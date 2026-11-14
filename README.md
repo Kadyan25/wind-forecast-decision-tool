@@ -198,8 +198,8 @@ vercel deploy --prod
 
 ## Assumptions and design decisions
 
-- **Decision window.** The brief scopes the product to purchase decisions made in January 2026. A decision on date D-1 is for delivery date D, so decision dates are 1–31 Jan and delivery dates are 2 Jan – 1 Feb.
-- **Gate closure.** The brief says decisions are made the day before delivery but gives no time. I default to **09:20 UTC**, the EPEX GB day-ahead auction gate closure. That selects the 07:30 forecast run. N2EX closes at 09:50, which would allow the 09:30 run, so the gate closure time is adjustable in the UI to compare the two. In January, UK time equals UTC.
+- **Decision window.** The product is scoped to purchase decisions made in January 2026. A decision on date D-1 is for delivery date D, so decision dates are 1–31 Jan and delivery dates are 2 Jan – 1 Feb.
+- **Gate closure.** Decisions are made the day before delivery, at an unspecified time, so I default to **09:20 UTC**, the EPEX GB day-ahead auction gate closure. That selects the 07:30 forecast run. N2EX closes at 09:50, which would allow the 09:30 run, so the gate closure time is adjustable in the UI to compare the two. In January, UK time equals UTC.
 - **Which forecast counts.** For each delivery date, the app uses the WINDFOR run with the latest `publishTime` at or before gate closure that covers that date. Runs published later are never used for scoring, even if they were more accurate.
 - **Aligning resolutions.** WINDFOR is hourly and FUELHH is half-hourly. Hourly outturn is the mean of the two half-hours in each hour. Hours missing either half are dropped, never filled in.
 - **Metrics.** Error is forecast − outturn, so positive means the forecast was too high. I report MAE, RMSE, bias and WAPE (total absolute error ÷ total outturn). I don't use MAPE because it blows up in low-wind hours.
